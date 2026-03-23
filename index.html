@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DevNotes - Markdown to HTML</title>
+    <meta
+      name="description"
+      content="DevNotes converts Markdown to HTML instantly with live preview."
+    />
+
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              surface: "#e8d8e2",
+              panel: "#dcc2d1",
+              panelSoft: "#d2b2c4",
+            },
+          },
+        },
+      };
+    </script>
+
+    <link
+      id="hljsTheme"
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github.min.css"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="min-h-screen bg-surface text-rose-950 antialiased" data-theme="bright">
+    <main class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+      <header class="mb-5 flex flex-wrap items-start justify-between gap-3">
+        <div class="max-w-3xl">
+          <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">DevNotes</h1>
+          <p class="mt-2 max-w-2xl text-sm leading-6 text-rose-950/80 sm:text-base">
+            DevNotes turns your Markdown into clean HTML instantly. Write on the left,
+            preview on the right, and copy the HTML in one click, with autosave to protect
+            your notes between refreshes.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-end gap-2">
+          <button
+            id="themeToggleBtn"
+            class="rounded-lg bg-slate-800 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-surface"
+            type="button"
+          >
+            Dark Mode
+          </button>
+          <button
+            id="copyHtmlBtn"
+            class="rounded-lg bg-rose-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-300 focus:ring-offset-2 focus:ring-offset-surface"
+            type="button"
+          >
+            Copy HTML
+          </button>
+          <button id="copyMarkdownBtn" class="rounded-lg bg-rose-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-rose-400" type="button">Copy Markdown</button>
+          <button id="copyPreviewTextBtn" class="rounded-lg bg-rose-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-rose-400" type="button">Copy Preview Text</button>
+          <button id="downloadHtmlBtn" class="rounded-lg bg-rose-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-rose-400" type="button">Download HTML</button>
+          <span id="copyStatus" class="text-sm text-rose-950/80" aria-live="polite"></span>
+        </div>
+      </header>
+
+      <section class="mb-4 rounded-xl border border-rose-300 bg-panel p-3 shadow-sm shadow-rose-400/25">
+        <div class="flex flex-wrap items-center gap-2">
+          <label for="noteSelect" class="text-sm font-medium">Note</label>
+          <select id="noteSelect" class="rounded-md border border-rose-300 bg-panelSoft px-2 py-1 text-sm"></select>
+          <button id="newNoteBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white">New Note</button>
+          <button id="renameNoteBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white">Rename</button>
+          <button id="deleteNoteBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white">Delete</button>
+          <label class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white cursor-pointer">
+            Import .md
+            <input id="importMdInput" type="file" accept=".md,text/markdown" class="hidden" />
+          </label>
+          <button id="exportMdBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white">Export .md</button>
+          <label for="historySelect" class="ml-2 text-sm font-medium">History</label>
+          <select id="historySelect" class="rounded-md border border-rose-300 bg-panelSoft px-2 py-1 text-sm"></select>
+          <button id="restoreHistoryBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white">Restore</button>
+          <span id="statsBadge" class="ml-auto rounded-md bg-panelSoft px-2 py-1 text-xs font-medium"></span>
+          <span id="renderBadge" class="rounded-md bg-panelSoft px-2 py-1 text-xs font-medium"></span>
+        </div>
+      </section>
+
+      <section class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <article class="rounded-xl border border-rose-300 bg-panel p-3 shadow-sm shadow-rose-400/25">
+          <div class="mb-2 flex flex-wrap items-center gap-2">
+            <label for="markdownInput" class="block text-sm font-medium text-rose-950/80">
+              Markdown Input
+            </label>
+            <button class="toolbar-btn" data-insert="# " type="button">H1</button>
+            <button class="toolbar-btn" data-wrap="**" type="button">Bold</button>
+            <button class="toolbar-btn" data-wrap="*" type="button">Italic</button>
+            <button class="toolbar-btn" data-insert="\n- " type="button">List</button>
+            <button class="toolbar-btn" data-template="code" type="button">Code</button>
+            <button class="toolbar-btn" data-template="link" type="button">Link</button>
+            <button class="toolbar-btn" data-template="table" type="button">Table</button>
+            <button class="toolbar-btn" data-template="tasks" type="button">Tasks</button>
+            <button class="toolbar-btn" data-template="footnote" type="button">Footnote</button>
+          </div>
+          <div class="mb-2 flex items-center gap-2">
+            <input id="findInput" class="w-44 rounded-md border border-rose-300 bg-panelSoft px-2 py-1 text-sm" placeholder="Find in notes" />
+            <button id="findNextBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white" type="button">Find Next</button>
+          </div>
+          <textarea
+            id="markdownInput"
+            class="h-[60vh] w-full resize-none rounded-lg border border-rose-300 bg-panelSoft p-4 font-mono text-sm leading-6 text-rose-950 outline-none transition focus:border-rose-500 focus:ring-2 focus:ring-rose-400/35"
+            spellcheck="false"
+          ></textarea>
+        </article>
+
+        <article class="rounded-xl border border-rose-300 bg-panel p-3 shadow-sm shadow-rose-400/25">
+          <div class="mb-2 flex flex-wrap items-center gap-2">
+            <h2 class="text-sm font-medium text-rose-950/80">Preview</h2>
+            <button id="toggleRawBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white" type="button">Raw HTML</button>
+            <button id="previewFullscreenBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white" type="button">Fullscreen</button>
+          </div>
+          <div
+            id="preview"
+            class="prose prose-rose prose-pre:rounded-lg max-w-none h-[60vh] overflow-auto rounded-lg border border-rose-300 bg-panelSoft p-4"
+          ></div>
+        </article>
+      </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
