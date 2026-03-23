@@ -9,6 +9,10 @@ const renderBadge = document.getElementById("renderBadge");
 const noteSelect = document.getElementById("noteSelect");
 const historySelect = document.getElementById("historySelect");
 const themeToggleBtn = document.getElementById("themeToggleBtn");
+const editorPanel = document.getElementById("editorPanel");
+const previewPanel = document.getElementById("previewPanel");
+const workspaceGrid = document.getElementById("workspaceGrid");
+const helpDialog = document.getElementById("helpDialog");
 
 const templates = {
   code: "\n```js\nfunction greet(name) {\n  return `Hello, \\${name}!`;\n}\n```\n",
@@ -36,6 +40,7 @@ let findCursor = 0;
 let saveTimeoutId;
 let renderTimeoutId;
 const hljsTheme = document.getElementById("hljsTheme");
+let isSyncingScroll = false;
 
 marked.setOptions({
   gfm: true,
@@ -212,6 +217,28 @@ function downloadFile(filename, content, mimeType) {
   URL.revokeObjectURL(url);
 }
 
+function buildStandaloneHtml() {
+  const cssText = `
+body { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 2rem; line-height: 1.65; color: #0f172a; }
+pre { background: #f1f5f9; padding: 0.9rem; border-radius: 0.5rem; overflow-x: auto; }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+a { color: #2563eb; }
+img { max-width: 100%; }
+`;
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DevNotes Export</title>
+  <style>${cssText}</style>
+</head>
+<body>
+${latestRenderedHtml}
+</body>
+</html>`;
+}
+
 function insertAtCursor(prefix, suffix = "", fallback = "") {
   const start = markdownInput.selectionStart;
   const end = markdownInput.selectionEnd;
@@ -335,8 +362,44 @@ function toggleFullscreen() {
   document.body.classList.toggle("preview-fullscreen");
 }
 
+function showEditorOnMobile() {
+  if (window.innerWidth >= 1024) return;
+  editorPanel.classList.remove("hidden");
+  previewPanel.classList.add("hidden");
+}
+
+function showPreviewOnMobile() {
+  if (window.innerWidth >= 1024) return;
+  previewPanel.classList.remove("hidden");
+  editorPanel.classList.add("hidden");
+}
+
+function syncScroll(source, target) {
+  if (isSyncingScroll) return;
+  const maxSource = source.scrollHeight - source.clientHeight;
+  const maxTarget = target.scrollHeight - target.clientHeight;
+  if (maxSource <= 0 || maxTarget <= 0) return;
+  isSyncingScroll = true;
+  const ratio = source.scrollTop / maxSource;
+  target.scrollTop = ratio * maxTarget;
+  requestAnimationFrame(() => {
+    isSyncingScroll = false;
+  });
+}
+
+function openHelpDialog() {
+  if (typeof helpDialog.showModal === "function") helpDialog.showModal();
+}
+
+function closeHelpDialog() {
+  if (helpDialog.open) helpDialog.close();
+}
+
 function onKeydown(event) {
   const mod = event.metaKey || event.ctrlKey;
+  if (event.key === "Escape") {
+    closeHelpDialog();
+  }
   if (!mod) return;
   if (event.key.toLowerCase() === "s") {
     event.preventDefault();
@@ -347,6 +410,9 @@ function onKeydown(event) {
   } else if (event.shiftKey && event.key.toLowerCase() === "c") {
     event.preventDefault();
     copyText(latestRenderedHtml, "HTML copied");
+  } else if (event.key === "/") {
+    event.preventDefault();
+    openHelpDialog();
   }
 }
 
@@ -372,6 +438,17 @@ function init() {
   document.getElementById("copyMarkdownBtn").addEventListener("click", () => copyText(markdownInput.value, "Markdown copied"));
   document.getElementById("copyPreviewTextBtn").addEventListener("click", () => copyText(preview.innerText, "Preview text copied"));
   document.getElementById("downloadHtmlBtn").addEventListener("click", () => downloadFile("devnotes-preview.html", latestRenderedHtml, "text/html"));
+  document.getElementById("exportStandaloneBtn").addEventListener("click", () => {
+    downloadFile("devnotes-standalone.html", buildStandaloneHtml(), "text/html");
+  });
+  document.getElementById("printPdfBtn").addEventListener("click", () => {
+    const w = window.open("", "_blank", "width=900,height=700");
+    if (!w) return setCopyStatus("Popup blocked", "error");
+    w.document.write(buildStandaloneHtml());
+    w.document.close();
+    w.focus();
+    setTimeout(() => w.print(), 200);
+  });
   document.getElementById("exportMdBtn").addEventListener("click", exportMd);
   document.getElementById("importMdInput").addEventListener("change", (event) => {
     const file = event.target.files && event.target.files[0];
@@ -392,8 +469,23 @@ function init() {
   document.addEventListener("click", onToolbarClick);
   document.getElementById("toggleRawBtn").addEventListener("click", toggleRawPreview);
   document.getElementById("previewFullscreenBtn").addEventListener("click", toggleFullscreen);
+  document.getElementById("showEditorBtn").addEventListener("click", showEditorOnMobile);
+  document.getElementById("showPreviewBtn").addEventListener("click", showPreviewOnMobile);
+  document.getElementById("helpBtn").addEventListener("click", openHelpDialog);
+  document.getElementById("closeHelpBtn").addEventListener("click", closeHelpDialog);
+  markdownInput.addEventListener("scroll", () => syncScroll(markdownInput, preview));
+  preview.addEventListener("scroll", () => syncScroll(preview, markdownInput));
+  window.addEventListener("resize", () => {
+    if (window.innerWidth >= 1024) {
+      editorPanel.classList.remove("hidden");
+      previewPanel.classList.remove("hidden");
+      workspaceGrid.classList.add("lg:grid-cols-2");
+    }
+  });
   themeToggleBtn.addEventListener("click", toggleTheme);
   window.addEventListener("keydown", onKeydown);
+
+  if (window.innerWidth < 1024) showEditorOnMobile();
 }
 
 init();

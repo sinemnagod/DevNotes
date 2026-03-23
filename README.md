@@ -7,12 +7,16 @@ DevNotes is a lightweight, client-side Markdown-to-HTML workspace with live prev
 - Dual-pane editor (Markdown input + rendered preview)
 - Real-time parsing with `marked.js`
 - Copy generated HTML, Markdown, and preview text
-- Download generated HTML and export/import `.md` files
+- Download generated HTML, standalone HTML, and print/save PDF
+- Import/export `.md` files
 - Multi-note session management (create/rename/delete)
 - Local persistence with snapshot history restore
 - Syntax highlighting for code blocks via `highlight.js`
 - Search in editor and formatting toolbar actions
 - Raw HTML preview toggle + preview fullscreen mode
+- Mobile editor/preview tab switcher
+- Scroll sync between editor and preview
+- Built-in help dialog for shortcuts
 - Keyboard shortcuts for copy/export/find/tab indent
 - Responsive UI with bright (pink) and dark (navy) mode toggle
 
@@ -39,14 +43,17 @@ No backend, build tool, or package installation is required for the current MVP.
 3. Use the toolbar for quick formatting/templates (table, task list, footnote, code).
 4. Use top actions for copy/export/import and note management.
 5. Toggle `Dark Mode` / `Bright Mode` to switch themes.
-6. Refresh and verify content/history restoration.
+6. Use `Help` for shortcut reference and mobile `Editor/Preview` tabs on small screens.
+7. Refresh and verify content/history restoration.
 
 ## Shortcuts
 
 - `Cmd/Ctrl + Shift + C`: Copy generated HTML
 - `Cmd/Ctrl + S`: Export current note as `.md`
 - `Cmd/Ctrl + F`: Focus find input
+- `Cmd/Ctrl + /`: Open help dialog
 - `Tab` in editor: Insert indentation
+- `Esc`: Close help dialog
 
 ## Manual Test Checklist (Demo)
 

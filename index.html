@@ -77,17 +77,25 @@
             <input id="importMdInput" type="file" accept=".md,text/markdown" class="hidden" />
           </label>
           <button id="exportMdBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white">Export .md</button>
+          <button id="exportStandaloneBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white">Export Standalone HTML</button>
+          <button id="printPdfBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white">Print / Save PDF</button>
           <label for="historySelect" class="ml-2 text-sm font-medium">History</label>
           <select id="historySelect" class="rounded-md border border-rose-300 bg-panelSoft px-2 py-1 text-sm"></select>
           <button id="restoreHistoryBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white">Restore</button>
           <span id="statsBadge" class="ml-auto rounded-md bg-panelSoft px-2 py-1 text-xs font-medium"></span>
           <span id="renderBadge" class="rounded-md bg-panelSoft px-2 py-1 text-xs font-medium"></span>
+          <button id="helpBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white" type="button">Help</button>
         </div>
       </section>
 
-      <section class="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <article class="rounded-xl border border-rose-300 bg-panel p-3 shadow-sm shadow-rose-400/25">
-          <div class="mb-2 flex flex-wrap items-center gap-2">
+      <section class="mb-3 flex items-center gap-2 lg:hidden">
+        <button id="showEditorBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white" type="button">Editor</button>
+        <button id="showPreviewBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white" type="button">Preview</button>
+      </section>
+
+      <section id="workspaceGrid" class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <article id="editorPanel" class="rounded-xl border border-rose-300 bg-panel p-3 shadow-sm shadow-rose-400/25">
+          <div class="mb-2 flex h-[38px] items-center gap-2 overflow-x-auto whitespace-nowrap">
             <label for="markdownInput" class="block text-sm font-medium text-rose-950/80">
               Markdown Input
             </label>
@@ -102,29 +110,60 @@
             <button class="toolbar-btn" data-template="footnote" type="button">Footnote</button>
           </div>
           <div class="mb-2 flex items-center gap-2">
-            <input id="findInput" class="w-44 rounded-md border border-rose-300 bg-panelSoft px-2 py-1 text-sm" placeholder="Find in notes" />
+            <input id="findInput" class="w-44 rounded-md border border-rose-300 bg-panelSoft px-2 py-1 text-sm" placeholder="Find in notes" aria-label="Find in notes" />
             <button id="findNextBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white" type="button">Find Next</button>
           </div>
           <textarea
             id="markdownInput"
             class="h-[60vh] w-full resize-none rounded-lg border border-rose-300 bg-panelSoft p-4 font-mono text-sm leading-6 text-rose-950 outline-none transition focus:border-rose-500 focus:ring-2 focus:ring-rose-400/35"
             spellcheck="false"
+            aria-label="Markdown editor"
           ></textarea>
         </article>
 
-        <article class="rounded-xl border border-rose-300 bg-panel p-3 shadow-sm shadow-rose-400/25">
-          <div class="mb-2 flex flex-wrap items-center gap-2">
+        <article id="previewPanel" class="rounded-xl border border-rose-300 bg-panel p-3 shadow-sm shadow-rose-400/25">
+          <div class="mb-2 flex h-[38px] items-center gap-2 overflow-x-auto whitespace-nowrap">
             <h2 class="text-sm font-medium text-rose-950/80">Preview</h2>
             <button id="toggleRawBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white" type="button">Raw HTML</button>
             <button id="previewFullscreenBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white" type="button">Fullscreen</button>
           </div>
+          <div class="mb-2 flex items-center gap-2" aria-hidden="true">
+            <input
+              class="w-44 rounded-md border border-rose-300 bg-panelSoft px-2 py-1 text-sm invisible"
+              tabindex="-1"
+            />
+            <button
+              class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white invisible"
+              type="button"
+              tabindex="-1"
+            >
+              Find Next
+            </button>
+          </div>
           <div
             id="preview"
             class="prose prose-rose prose-pre:rounded-lg max-w-none h-[60vh] overflow-auto rounded-lg border border-rose-300 bg-panelSoft p-4"
+            aria-live="polite"
           ></div>
         </article>
       </section>
     </main>
+
+    <dialog id="helpDialog" class="rounded-xl border border-slate-500 bg-slate-900 p-0 text-slate-100 backdrop:bg-black/40">
+      <div class="p-4">
+        <h3 class="text-lg font-semibold">DevNotes Shortcuts</h3>
+        <ul class="mt-3 space-y-1 text-sm">
+          <li><code>Cmd/Ctrl + Shift + C</code> Copy HTML</li>
+          <li><code>Cmd/Ctrl + S</code> Export current note as .md</li>
+          <li><code>Cmd/Ctrl + F</code> Focus find</li>
+          <li><code>Tab</code> Insert indentation in editor</li>
+          <li><code>Esc</code> Close this dialog</li>
+        </ul>
+        <div class="mt-4 flex justify-end">
+          <button id="closeHelpBtn" class="rounded-md bg-slate-700 px-3 py-1.5 text-sm text-white" type="button">Close</button>
+        </div>
+      </div>
+    </dialog>
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
