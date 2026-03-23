@@ -19,6 +19,7 @@ DevNotes is a lightweight, client-side Markdown-to-HTML workspace with live prev
 - Built-in help dialog for shortcuts
 - Keyboard shortcuts for copy/export/find/tab indent
 - Responsive UI with bright (pink) and dark (navy) mode toggle
+- Symbol-enhanced buttons and labels for clearer visual navigation
 
 ## Tech Stack
 

@@ -35,7 +35,7 @@
     <main class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
       <header class="mb-5 flex flex-wrap items-start justify-between gap-3">
         <div class="max-w-3xl">
-          <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">DevNotes</h1>
+          <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">DevNotes ✨</h1>
           <p class="mt-2 max-w-2xl text-sm leading-6 text-rose-950/80 sm:text-base">
             DevNotes turns your Markdown into clean HTML instantly. Write on the left,
             preview on the right, and copy the HTML in one click, with autosave to protect
@@ -49,55 +49,55 @@
             class="rounded-lg bg-slate-800 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-surface"
             type="button"
           >
-            Dark Mode
+            🌙 Dark Mode
           </button>
           <button
             id="copyHtmlBtn"
             class="rounded-lg bg-rose-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-300 focus:ring-offset-2 focus:ring-offset-surface"
             type="button"
           >
-            Copy HTML
+            📋 Copy HTML
           </button>
-          <button id="copyMarkdownBtn" class="rounded-lg bg-rose-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-rose-400" type="button">Copy Markdown</button>
-          <button id="copyPreviewTextBtn" class="rounded-lg bg-rose-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-rose-400" type="button">Copy Preview Text</button>
-          <button id="downloadHtmlBtn" class="rounded-lg bg-rose-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-rose-400" type="button">Download HTML</button>
+          <button id="copyMarkdownBtn" class="rounded-lg bg-rose-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-rose-400" type="button">📝 Copy Markdown</button>
+          <button id="copyPreviewTextBtn" class="rounded-lg bg-rose-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-rose-400" type="button">📄 Copy Preview Text</button>
+          <button id="downloadHtmlBtn" class="rounded-lg bg-rose-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-rose-400" type="button">⬇️ Download HTML</button>
           <span id="copyStatus" class="text-sm text-rose-950/80" aria-live="polite"></span>
         </div>
       </header>
 
       <section class="mb-4 rounded-xl border border-rose-300 bg-panel p-3 shadow-sm shadow-rose-400/25">
         <div class="flex flex-wrap items-center gap-2">
-          <label for="noteSelect" class="text-sm font-medium">Note</label>
+          <label for="noteSelect" class="text-sm font-medium">🗂️ Note</label>
           <select id="noteSelect" class="rounded-md border border-rose-300 bg-panelSoft px-2 py-1 text-sm"></select>
-          <button id="newNoteBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white">New Note</button>
-          <button id="renameNoteBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white">Rename</button>
-          <button id="deleteNoteBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white">Delete</button>
+          <button id="newNoteBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white">➕ New Note</button>
+          <button id="renameNoteBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white">✏️ Rename</button>
+          <button id="deleteNoteBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white">🗑️ Delete</button>
           <label class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white cursor-pointer">
-            Import .md
+            📥 Import .md
             <input id="importMdInput" type="file" accept=".md,text/markdown" class="hidden" />
           </label>
-          <button id="exportMdBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white">Export .md</button>
-          <button id="exportStandaloneBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white">Export Standalone HTML</button>
-          <button id="printPdfBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white">Print / Save PDF</button>
-          <label for="historySelect" class="ml-2 text-sm font-medium">History</label>
+          <button id="exportMdBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white">📤 Export .md</button>
+          <button id="exportStandaloneBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white">🌐 Standalone HTML</button>
+          <button id="printPdfBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white">🖨️ Save PDF</button>
+          <label for="historySelect" class="ml-2 text-sm font-medium">🕘 History</label>
           <select id="historySelect" class="rounded-md border border-rose-300 bg-panelSoft px-2 py-1 text-sm"></select>
-          <button id="restoreHistoryBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white">Restore</button>
+          <button id="restoreHistoryBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white">♻️ Restore</button>
           <span id="statsBadge" class="ml-auto rounded-md bg-panelSoft px-2 py-1 text-xs font-medium"></span>
           <span id="renderBadge" class="rounded-md bg-panelSoft px-2 py-1 text-xs font-medium"></span>
-          <button id="helpBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white" type="button">Help</button>
+          <button id="helpBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white" type="button">❓ Help</button>
         </div>
       </section>
 
       <section class="mb-3 flex items-center gap-2 lg:hidden">
-        <button id="showEditorBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white" type="button">Editor</button>
-        <button id="showPreviewBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white" type="button">Preview</button>
+        <button id="showEditorBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white" type="button">⌨️ Editor</button>
+        <button id="showPreviewBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white" type="button">👀 Preview</button>
       </section>
 
       <section id="workspaceGrid" class="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <article id="editorPanel" class="rounded-xl border border-rose-300 bg-panel p-3 shadow-sm shadow-rose-400/25">
           <div class="mb-2 flex h-[38px] items-center gap-2 overflow-x-auto whitespace-nowrap">
             <label for="markdownInput" class="block text-sm font-medium text-rose-950/80">
-              Markdown Input
+              ✍️ Markdown Input
             </label>
             <button class="toolbar-btn" data-insert="# " type="button">H1</button>
             <button class="toolbar-btn" data-wrap="**" type="button">Bold</button>
@@ -123,9 +123,9 @@
 
         <article id="previewPanel" class="rounded-xl border border-rose-300 bg-panel p-3 shadow-sm shadow-rose-400/25">
           <div class="mb-2 flex h-[38px] items-center gap-2 overflow-x-auto whitespace-nowrap">
-            <h2 class="text-sm font-medium text-rose-950/80">Preview</h2>
-            <button id="toggleRawBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white" type="button">Raw HTML</button>
-            <button id="previewFullscreenBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white" type="button">Fullscreen</button>
+            <h2 class="text-sm font-medium text-rose-950/80">👀 Preview</h2>
+            <button id="toggleRawBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white" type="button">🔎 Raw HTML</button>
+            <button id="previewFullscreenBtn" class="rounded-md bg-rose-500 px-3 py-1.5 text-sm text-white" type="button">⛶ Fullscreen</button>
           </div>
           <div class="mb-2 flex items-center gap-2" aria-hidden="true">
             <input
